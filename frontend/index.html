@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Avaliação do Serviço</title>
+<link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+<h1>Avaliação do Serviço</h1>
+
+
+<!-- Estrelas -->
+<div>
+<h3>Avaliação:</h3>
+<div class="star-container" id="stars">
+<span data-value="1">★</span>
+<span data-value="2">★</span>
+<span data-value="3">★</span>
+<span data-value="4">★</span>
+<span data-value="5">★</span>
+</div>
+</div>
+
+
+<!-- Emojis -->
+<div>
+<h3>Como você se sentiu?</h3>
+<div class="emoji-container" id="emojis">
+<span data-value="1">😡</span>
+<span data-value="2">😕</span>
+<span data-value="3">😐</span>
+<span data-value="4">🙂</span>
+<span data-value="5">😄</span>
+</div>
+</div>
+
+
+<!-- Comentário -->
+<div>
+<h3>Comentário (opcional):</h3>
+<textarea id="comment" cols="40" rows="5" placeholder="Escreva algo..."></textarea>
+</div>
+
+
+<button id="sendBtn">Enviar Feedback</button>
+
+
+<script src="./js/main.js" defer></script>
+</body>
+</html>
