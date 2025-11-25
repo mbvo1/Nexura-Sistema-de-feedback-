@@ -57,14 +57,48 @@ São exibidos gráficos de barras e KPIs que mostram a distribuição das notas 
 O analista registra melhorias baseadas nos feedbacks; essas atualizações aparecem automaticamente para os alunos.
 
 
+## Feito Utilizando ✒️
 
+![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 
+### Google Sites
+```
 
+```
 
+### Backlog
+```
+https://tree.taiga.io/project/carolinamaria-projetos-3-g8/kanban
+```
 
 
 ## 👥 Equipe
 
-````
-Artg
-````
+### Ciência da Computação
+```
+Arthur de Lima Von Sohsten - FrontEnd
+
+Eduardo Henrique De Sá Nogueira Lemos - Integração
+ 
+Eduardo Malheiros Leal Jacome - BackEnd
+
+Guilherme Rapela Medeiros - Integração
+
+Marcelo Bresani Victor de Oliveira - Banco de Dados
+
+Pedro Loureiro Galvão Guerra - FrontEnd
+
+Ramses cordeiro filgueiras espeira - FrontEnd
+
+Victor de Matos Vilela - BackEnd
+```
+### Design
+```
+Caio Henrique Bezerra Vilela -
+
+Carolina Maria Alves Graças -
+ 
+Gabriela Medeiros Britto Valadares Sampaio -
+ 
+Maria Fernanda Avellar de Albuquerque - 
+```
