@@ -59,7 +59,7 @@ O analista registra melhorias baseadas nos feedbacks; essas atualizações apare
 
 ## Feito Utilizando ✒️
 
-![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![JS](https://img.shields.io/badge/JavaScript-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![FireBase](https://img.shields.io/badge/FireBase-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 
 ### Google Sites
 ```
