@@ -1,6 +1,21 @@
 let selectedStar = null;
 let selectedEmoji = null;
 
+// Retorna o tipo de mensagem de acordo com a nota
+function obterTipoMensagem(nota) {
+    const numero = Number(nota);
+
+    if (!numero) {
+        return 'neutra'; // fallback
+    } else if (numero >= 4) {
+        return 'positiva';
+    } else if (numero === 3) {
+        return 'neutra';
+    } else {
+        return 'empatica';
+    }
+}
+
 const mockFeedbacks = [
     {
         id: 1,
@@ -36,31 +51,49 @@ const mockFeedbacks = [
     }
 ];
 
+// Lê parâmetros da query string (?id=123 etc.)
+function getQueryParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+}
+
+// Mostra uma mensagem de acordo com a nota + botão Voltar ao menu
 function mostrarMensagemPorNota(nota) {
     const box = document.getElementById('feedbackMessage');
     if (!box) return;
 
-    // sempre reseta as classes e garante que a caixa apareça
+    // limpa classes e garante que apareça
     box.className = 'feedback-message';
     box.style.display = 'block';
 
-    const numero = Number(nota);
+    const tipo = obterTipoMensagem(nota);
     let texto = '';
 
-    if (!numero) {
-        texto = 'Obrigado pelo seu feedback!';
-    } else if (numero >= 4) {
+    if (tipo === 'positiva') {
         box.classList.add('feedback-message--positiva');
-        texto = 'Obrigado pela ótima avaliação! Ficamos muito felizes que você teve uma boa experiência com o curso.';
-    } else if (numero === 3) {
+        texto = 'Que bom que você gostou! Ficamos muito felizes que você teve uma ótima experiência com o curso.';
+    } else if (tipo === 'neutra') {
         box.classList.add('feedback-message--neutra');
-        texto = 'Obrigado pelo retorno! Seu feedback nos ajuda a entender o que podemos manter e o que ainda dá para melhorar.';
-    } else {
+        texto = 'Agradecemos sua opinião. Seu feedback nos ajuda a entender o que podemos manter e o que ainda dá para melhorar.';
+    } else { // empática
         box.classList.add('feedback-message--negativa');
-        texto = 'Sentimos muito que sua experiência não foi tão boa. Seu feedback é essencial para que possamos corrigir e melhorar.';
+        texto = 'Lamentamos a experiência. Vamos melhorar! Seu feedback é essencial para que possamos corrigir os pontos necessários.';
     }
 
-    box.textContent = texto;
+    // mensagem + botão "Voltar ao menu"
+    box.innerHTML = `
+        <p>${texto}</p>
+        <button id="btnVoltarMenu" class="btn feedback-back-btn">
+            Voltar ao menu
+        </button>
+    `;
+
+    const btnVoltar = document.getElementById('btnVoltarMenu');
+    if (btnVoltar) {
+        btnVoltar.addEventListener('click', () => {
+            window.location.href = '/'; // ou '/index.html' se preferir
+        });
+    }
 }
 // =========================
 // Página de Histórico (HUS-007)
@@ -89,7 +122,16 @@ if (historyTableBody) {
     const renderTabela = (lista) => {
         historyTableBody.innerHTML = '';
 
+        // Caso não exista NENHUM feedback cadastrado
+        if (!mockFeedbacks.length) {
+            historyEmptyMessage.textContent = 'Você ainda não enviou nenhum feedback.';
+            historyEmptyMessage.style.display = 'block';
+            return;
+        }
+
+        // Caso existam feedbacks, mas o filtro zerou a lista
         if (!lista.length) {
+            historyEmptyMessage.textContent = 'Nenhum feedback encontrado com os filtros atuais.';
             historyEmptyMessage.style.display = 'block';
             return;
         }
@@ -105,9 +147,23 @@ if (historyTableBody) {
                 <td>${fb.nota}</td>
                 <td>${fb.emoji}</td>
                 <td>${fb.comentario}</td>
+                <td>
+                    <button class="btn history-detail-btn" data-id="${fb.id}">
+                        Ver detalhes
+                    </button>
+                </td>
             `;
 
             historyTableBody.appendChild(tr);
+        });
+
+        // Adiciona os listeners dos botões "Ver detalhes"
+        document.querySelectorAll('.history-detail-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                // abre página de detalhes, passando o id na URL
+                window.location.href = `/detalhe-feedback.html?id=${id}`;
+            });
         });
     };
 
@@ -138,6 +194,41 @@ if (historyTableBody) {
     filterCurso.addEventListener('change', aplicarFiltros);
     filterTexto.addEventListener('input', aplicarFiltros);
 }
+// =========================
+// Página de Detalhe do Feedback (HUS-007 - AC5)
+// =========================
+
+const detalheContainer = document.getElementById('detalheContainer');
+
+if (detalheContainer) {
+    const idParam = getQueryParam('id');
+    const idNumero = Number(idParam);
+
+    const feedback = mockFeedbacks.find(fb => fb.id === idNumero);
+
+    if (!feedback) {
+        detalheContainer.innerHTML = `
+            <h2>Feedback não encontrado</h2>
+            <p>Não foi possível localizar o feedback solicitado.</p>
+            <a href="/historico.html" class="detail-back-link">Voltar ao histórico</a>
+        `;
+    } else {
+        detalheContainer.innerHTML = `
+            <h2>Detalhes do feedback</h2>
+            <div class="detail-meta">
+                <span><strong>Curso:</strong> ${feedback.curso}</span>
+                <span><strong>Data:</strong> ${feedback.data}</span>
+                <span><strong>Nota:</strong> ${feedback.nota} ${feedback.emoji}</span>
+            </div>
+            <div class="detail-comentario">
+                <strong>Comentário:</strong>
+                <p>${feedback.comentario || 'Nenhum comentário foi informado.'}</p>
+            </div>
+            <a href="/historico.html" class="detail-back-link">← Voltar ao histórico</a>
+        `;
+    }
+}
+
 
 
 // Verifica se é a página de feedback
@@ -163,30 +254,42 @@ emoji.classList.add('selected');
 });
 });
 
-
 // Enviar feedback
 document.getElementById('sendBtn').addEventListener('click', async () => {
     const comment = document.getElementById('comment').value;
 
+    // Descobre o tipo de mensagem com base na nota escolhida
+    const tipoMensagem = obterTipoMensagem(selectedStar);
+
     const payload = {
         estrelas: selectedStar,
         emoji: selectedEmoji,
-        comentario: comment
+        comentario: comment,
+        tipoMensagem: tipoMensagem
     };
 
     try {
-        await fetch('http://localhost:3000/api/feedback', {
+        const response = await fetch('http://localhost:3000/api/feedback', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
 
-        
+        if (!response.ok) {
+            throw new Error('Erro ao enviar feedback');
+        }
+
+        // Mostra a mensagem personalizada conforme a nota
         mostrarMensagemPorNota(selectedStar);
 
-        // opcional: limpar comentário e “desselecionar” estrela/emoji
-        document.getElementById('comment').value = '';
-        document.querySelectorAll('#stars span, #emojis span').forEach(el => el.classList.remove('selected'));
+        // Opcional: limpar comentário e desmarcar estrela/emoji
+        const commentEl = document.getElementById('comment');
+        if (commentEl) commentEl.value = '';
+
+        document
+            .querySelectorAll('#stars span, #emojis span')
+            .forEach(el => el.classList.remove('selected'));
+
         selectedStar = null;
         selectedEmoji = null;
 
@@ -195,7 +298,6 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
         console.error(error);
     }
 });
-
 
 }
 

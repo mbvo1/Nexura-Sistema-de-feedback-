@@ -423,6 +423,15 @@ a {
     color: #842029;
     border: 1px solid #f5c2c7;
 }
+.feedback-back-btn {
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
 /* ===================== */
 /* Histórico de feedback */
 /* ===================== */
@@ -510,6 +519,7 @@ a {
     color: #666;
 }
 
+
 .star-container span,
 .emoji-container span {
     cursor: pointer;
@@ -527,6 +537,49 @@ a {
 .selected {
     color: #ffd966;
 }
+/* ===================== */
+/* Detalhe do feedback   */
+/* ===================== */
+
+.detail-main {
+    max-width: 720px;
+    margin: 40px auto 60px;
+    padding: 0 16px;
+}
+
+.detail-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.detail-card h2 {
+    margin-bottom: 8px;
+}
+
+.detail-meta {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+.detail-meta span + span::before {
+    content: "•";
+    margin: 0 6px;
+}
+
+.detail-comentario {
+    margin-top: 12px;
+    font-size: 0.95rem;
+}
+
+.detail-back-link {
+    margin-top: 20px;
+    display: inline-block;
+    font-size: 0.9rem;
+}
+
 
 textarea {
     width: 100%;
