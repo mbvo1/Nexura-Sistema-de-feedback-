@@ -1,6 +1,41 @@
 let selectedStar = null;
 let selectedEmoji = null;
 
+const mockFeedbacks = [
+    {
+        id: 1,
+        data: '2025-11-20',
+        curso: 'Gestão de Projetos',
+        nota: 5,
+        emoji: '😄',
+        comentario: 'Curso excelente, conteúdo muito claro e aplicável.'
+    },
+    {
+        id: 2,
+        data: '2025-11-18',
+        curso: 'Marketing Digital',
+        nota: 3,
+        emoji: '😐',
+        comentario: 'Achei o conteúdo bom, mas poderia ter mais exemplos práticos.'
+    },
+    {
+        id: 3,
+        data: '2025-11-15',
+        curso: 'Gestão de Projetos',
+        nota: 2,
+        emoji: '😞',
+        comentario: 'Tive dificuldades em acompanhar algumas partes mais técnicas.'
+    },
+    {
+        id: 4,
+        data: '2025-11-10',
+        curso: 'Finanças Pessoais',
+        nota: 4,
+        emoji: '😊',
+        comentario: 'Gostei bastante, principalmente da parte de investimentos.'
+    }
+];
+
 function mostrarMensagemPorNota(nota) {
     const box = document.getElementById('feedbackMessage');
     if (!box) return;
@@ -27,6 +62,83 @@ function mostrarMensagemPorNota(nota) {
 
     box.textContent = texto;
 }
+// =========================
+// Página de Histórico (HUS-007)
+// =========================
+
+const historyTableBody = document.getElementById('historyTableBody');
+const historyEmptyMessage = document.getElementById('historyEmptyMessage');
+
+if (historyTableBody) {
+    const filterCurso = document.getElementById('filterCurso');
+    const filterTexto = document.getElementById('filterTexto');
+
+    // Preenche o select de cursos com base nos dados mock
+    const preencherOpcoesCurso = () => {
+        const cursosUnicos = Array.from(new Set(mockFeedbacks.map(fb => fb.curso)));
+
+        cursosUnicos.forEach(curso => {
+            const option = document.createElement('option');
+            option.value = curso;
+            option.textContent = curso;
+            filterCurso.appendChild(option);
+        });
+    };
+
+    // Renderiza as linhas da tabela
+    const renderTabela = (lista) => {
+        historyTableBody.innerHTML = '';
+
+        if (!lista.length) {
+            historyEmptyMessage.style.display = 'block';
+            return;
+        }
+
+        historyEmptyMessage.style.display = 'none';
+
+        lista.forEach(fb => {
+            const tr = document.createElement('tr');
+
+            tr.innerHTML = `
+                <td>${fb.data}</td>
+                <td>${fb.curso}</td>
+                <td>${fb.nota}</td>
+                <td>${fb.emoji}</td>
+                <td>${fb.comentario}</td>
+            `;
+
+            historyTableBody.appendChild(tr);
+        });
+    };
+
+    // Aplica filtros de curso e texto
+    const aplicarFiltros = () => {
+        const cursoSelecionado = filterCurso.value;
+        const textoBusca = filterTexto.value.trim().toLowerCase();
+
+        const filtrados = mockFeedbacks.filter(fb => {
+            const confereCurso = cursoSelecionado
+                ? fb.curso === cursoSelecionado
+                : true;
+
+            const confereTexto = textoBusca
+                ? fb.comentario.toLowerCase().includes(textoBusca)
+                : true;
+
+            return confereCurso && confereTexto;
+        });
+
+        renderTabela(filtrados);
+    };
+
+    // Inicialização da página de histórico
+    preencherOpcoesCurso();
+    aplicarFiltros();
+
+    filterCurso.addEventListener('change', aplicarFiltros);
+    filterTexto.addEventListener('input', aplicarFiltros);
+}
+
 
 // Verifica se é a página de feedback
 if (document.getElementById("sendBtn")) {
