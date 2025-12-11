@@ -459,7 +459,7 @@ if (document.getElementById('sendBtn')) {
         try {
             sendBtn.disabled = true;
 
-            const response = await fetch('http://localhost:3000/api/feedback', {
+            const response = await fetch('/api/feedback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
