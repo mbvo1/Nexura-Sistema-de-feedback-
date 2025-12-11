@@ -57,7 +57,7 @@ function getQueryParam(name) {
     return params.get(name);
 }
 // Chave usada para guardar o canal preferido no navegador (simula persistência até a API ficar pronta)
-const CANAL_PREFERIDO_KEY = 'nexura_canal_preferido';
+const CANAL_PREFERIDO_KEY = 'devora_canal_preferido';
 
 
 // Mostra uma mensagem de acordo com a nota + botão Voltar ao menu
